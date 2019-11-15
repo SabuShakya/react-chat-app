@@ -10,7 +10,8 @@ const addUser = ({id, name, room}) => {
     }
 
     const user = {id, name, room};
-    users.push(users);
+    users.push(user);
+    console.log("User pushed", users);
     return {user};
 };
 
@@ -21,8 +22,11 @@ const removeUser = id => {
     }
 };
 
-const getUser = id => users.find(user => user.id === id);
+const getUser = id => {
+    console.log(users);
+    return users.find(user => user.id === id);
+};
 
 const getUsersInRoom = room => users.filter(user => user.room === room);
 
-module.exports = {addUser,getUser,removeUser,getUsersInRoom};
+module.exports = {addUser, getUser, removeUser, getUsersInRoom};

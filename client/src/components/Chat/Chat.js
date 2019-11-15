@@ -9,6 +9,7 @@ const Chat = ({location}) => {
     const [room, setRoom] = useState('');
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const [userId, setUserId] = useState('');
 
     const ENDPOINT = 'localhost:5000';
 
@@ -30,7 +31,8 @@ const Chat = ({location}) => {
 
     useEffect(() => {
         socket.on('message', (message) => {
-            setMessages([...messages, message])
+            setMessages([...messages, message]);
+            setUserId(message.id);
         })
     }, [messages]);
 
@@ -39,11 +41,11 @@ const Chat = ({location}) => {
         event.preventDefault();
 
         if (message) {
-            socket.emit('sendMessage', message, () => setMessage(''))
+            socket.emit('sendMessage', {message, userId}, () => setMessage(''))
         }
     };
 
-    console.log(message,messages);
+    console.log(message, messages);
 
     return (
         <div className="outerContainer">
