@@ -39,13 +39,13 @@ const Chat = ({location}) => {
     // function for sending messages
     const sendMessage = event => {
         event.preventDefault();
-
         if (message) {
             socket.emit('sendMessage', {message, userId}, () => setMessage(''))
         }
     };
 
-    console.log(message, messages);
+    console.log("message sent", message);
+    console.log("messages", messages);
 
     return (
         <div className="outerContainer">
