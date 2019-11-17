@@ -25,8 +25,7 @@ const Chat = ({location}) => {
 
         socket = io(ENDPOINT);
 
-        socket.emit('join', {name, room}, () => {
-        });
+        socket.emit('join', {name, room}, () => {});
 
         return () => {
             socket.emit('disconnect');
@@ -37,7 +36,8 @@ const Chat = ({location}) => {
     useEffect(() => {
         socket.on('message', (message) => {
             setMessages([...messages, message]);
-            setUserId(message.id);
+            // setUserId(message.currentUserId); // yo garda kina mildaena?
+            setUserId(socket.id);// yo garda milxa
         })
     }, [messages]);
 

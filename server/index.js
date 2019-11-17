@@ -19,16 +19,16 @@ io.on('connection', (socket) => {
         const {error, user} = addUser({id: socket.id, name, room});
 
         if (error) return callback(error);
-
+        console.log("back soc", socket.id);
         socket.emit('message', {
             user: 'admin',
             text: `${user.name}, Welcome to the room ${user.room}`,
-            id: socket.id
+            currentUserId: socket.id
         });
         socket.broadcast.to(user.room).emit('message', {
             user: 'admin',
             text: `${user.name},has joined!`,
-            id: socket.id
+            currentUserId: socket.id
         });
 
         socket.join(user.room);
@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
         io.to(user.room).emit('message', {
             user: user.name,
             text: data.message,
-            id: data.userId
+            currentUserId: data.userId
         });
         io.to(user.room).emit('roomData', {
             room: user.room,
