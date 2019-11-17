@@ -18,7 +18,7 @@ io.on('connection', (socket) => {
     socket.on('join', ({name, room}, callback) => {
         const {error, user} = addUser({id: socket.id, name, room});
 
-        if (error) return callback({error});
+        if (error) return callback(error);
 
         socket.emit('message', {
             user: 'admin',
@@ -32,6 +32,11 @@ io.on('connection', (socket) => {
         });
 
         socket.join(user.room);
+
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        });
         callback();
     });
 
@@ -42,11 +47,21 @@ io.on('connection', (socket) => {
             text: data.message,
             id: data.userId
         });
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        });
         callback();
     });
 
     socket.on('disconnect', () => {
-        console.log("User has left");
+        const user = removeUser(socket.id);
+        if (user) {
+            io.to(user.room).emit('message', {
+                user: 'admin',
+                text: `${user.name} has left`
+            })
+        }
     })
 });
 
